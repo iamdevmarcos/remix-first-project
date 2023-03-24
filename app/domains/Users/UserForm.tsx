@@ -1,12 +1,14 @@
+import { Form } from "@remix-run/react";
+
 export function UserForm() {
   return (
-    <form method="POST">
+    <Form method="post">
       <div>
         <label htmlFor="name">Name</label>
         <input type="text" name="name" id="name" />
       </div>
 
       <button type="submit">Create</button>
-    </form>
+    </Form>
   )
 }

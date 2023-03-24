@@ -1,11 +1,15 @@
+import { PrismaClient, type User } from '@prisma/client'
 import { faker } from '@faker-js/faker'
 
-export type User = Record<"id" | "name" | "avatar", string>
+const db = new PrismaClient()
 
 export async function getUsers() {
-  return Array.from({ length: 12 }, () => ({
-      id: faker.datatype.uuid(),
-      name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-      avatar: faker.image.cats()
-  }))
+  return db.user.findMany({ orderBy: { name: 'desc' } })
+}
+
+export async function createUser(user: User) {
+  return db.user.create({ data: {
+    ...user,
+    avatar: faker.image.cats()
+  } })
 }
