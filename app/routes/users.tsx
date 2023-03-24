@@ -1,30 +1,18 @@
-import { faker } from '@faker-js/faker'
+import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
+import { UsersList } from '~/domains/Users/UsersList'
+import { getUsers } from '~/domains/Users/users.api.server'
 
 export async function loader() {
-  return {
-    users: Array.from({ length: 12 }, () => ({
-      id: faker.datatype.uuid(),
-      name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-      avatar: faker.image.cats()
-    }))
-  }
+  return json({
+    users: await getUsers()
+  })
 }
 
 export default function() {
   const { users } = useLoaderData<typeof loader>()
 
   return (
-    <div>
-      <div>Users</div>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>
-            <div>{user.name}</div>
-            <img src={user.avatar} alt={user.name} height="200" />
-          </li>
-        ))}
-      </ul>
-    </div>
+    <UsersList users={users} />
   )
 }
